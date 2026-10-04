@@ -68,7 +68,7 @@ def private_panel(_):
 # SOURCE CODE VIDEO
 # =========================
 
-@app.on_callback_query(filters.regex("^gib_source$"))
+@nand.on_callback_query(filters.regex("^gib_source$"))
 async def gib_repo_callback(_, callback_query):
 
     await callback_query.answer()
