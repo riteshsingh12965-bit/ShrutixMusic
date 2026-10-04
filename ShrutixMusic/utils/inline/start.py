@@ -6,8 +6,7 @@ from pyrogram.types import (
 )
 
 import config
-from ShrutixMusic import app
-
+from ShrutixMusic import nand
 
 # =========================
 # START BUTTONS
@@ -18,7 +17,7 @@ def start_panel(_):
         [
             InlineKeyboardButton(
                 text=_["S_B_1"],
-                url=f"https://t.me/{app.username}?startgroup=true",
+                url=f"https://t.me/{nand.username}?startgroup=true",
             ),
             InlineKeyboardButton(
                 text=_["S_B_2"],
@@ -33,7 +32,7 @@ def private_panel(_):
         [
             InlineKeyboardButton(
                 text=_["S_B_3"],
-                url=f"https://t.me/{app.username}?startgroup=true",
+                url=f"https://t.me/{nand.username}?startgroup=true",
             )
         ],
         [
