@@ -1,78 +1,99 @@
-import random
-
-from pyrogram.enums import ButtonStyle
-from pyrogram.types import InlineKeyboardButton
+from pyrogram import filters
+from pyrogram.types import (
+    InlineKeyboardMarkup,
+    InlineKeyboardButton,
+    InputMediaVideo,
+)
 
 import config
-from ShrutixMusic import nand
-
-COLORS = (ButtonStyle.PRIMARY, ButtonStyle.SUCCESS, ButtonStyle.DANGER)
+from ShrutixMusic import app
 
 
-def _random_styles(count, blanks):
-    blank_at = set(random.sample(range(count), blanks))
-    colored = [i for i in range(count) if i not in blank_at]
-    while True:
-        picks = {i: random.choice(COLORS) for i in colored}
-        if len(colored) < 3 or len(set(picks.values())) > 1:
-            break
-    return [picks.get(i, ButtonStyle.DEFAULT) for i in range(count)]
-
+# =========================
+# START BUTTONS
+# =========================
 
 def start_panel(_):
-    s = _random_styles(2, random.choice((0, 1)))
-    buttons = [
+    return [
         [
             InlineKeyboardButton(
                 text=_["S_B_1"],
-                url=f"https://t.me/{nand.username}?startgroup=true",
-                style=s[0],
+                url=f"https://t.me/{app.username}?startgroup=true",
             ),
             InlineKeyboardButton(
                 text=_["S_B_2"],
                 url=config.SUPPORT_CHAT,
-                style=s[1],
             ),
-        ],
+        ]
     ]
-    return buttons
 
 
 def private_panel(_):
-    s = _random_styles(5, random.choice((0, 1, 1, 2, 2)))
-    buttons = [
+    return [
         [
             InlineKeyboardButton(
                 text=_["S_B_3"],
-                url=f"https://t.me/{nand.username}?startgroup=true",
-                style=s[0],
+                url=f"https://t.me/{app.username}?startgroup=true",
             )
+        ],
+        [
+            InlineKeyboardButton(
+                text=_["S_B_9"],
+                url=config.SUPPORT_CHAT,
+            ),
+            InlineKeyboardButton(
+                text=_["S_B_10"],
+                url=config.SUPPORT_CHANNEL,
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text=_["S_B_7"],
+                callback_data="gib_source",
+            ),
+            InlineKeyboardButton(
+                text=_["S_B_5"],
+                user_id=config.OWNER_ID,
+            ),
         ],
         [
             InlineKeyboardButton(
                 text=_["S_B_4"],
                 callback_data="settings_back_helper",
-                style=s[1],
             )
         ],
-        [
-            InlineKeyboardButton(
-                text=_["S_B_6"],
-                url=config.SUPPORT_CHANNEL,
-                style=s[2],
-            ),
-            InlineKeyboardButton(
-                text=_["S_B_2"],
-                url=config.SUPPORT_CHAT,
-                style=s[3],
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                text=_["S_B_5"],
-                user_id=config.OWNER_ID,
-                style=s[4],
-            ),
-        ],
     ]
-    return buttons
+
+
+# =========================
+# SOURCE CODE VIDEO
+# =========================
+
+@app.on_callback_query(filters.regex("^gib_source$"))
+async def gib_repo_callback(_, callback_query):
+
+    await callback_query.answer()
+
+    await callback_query.edit_message_media(
+        media=InputMediaVideo(
+            "https://telegra.ph/file/b1367262cdfbcd0b2af07.mp4",
+            has_spoiler=True,
+            caption=(
+                "<b>✦ 🌚 ʟᴜɴᴅ ʟᴇʟᴇ ᴍᴇʀᴀ ʀᴇᴘᴏ ᴋʏᴀ ᴋᴀʀᴇɢᴀ, ʟᴇɢᴀ ᴋʏᴀ ʙʜᴏsᴀᴅɪᴋᴇ..!!</b>"
+            ),
+        ),
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="• ʙᴀᴄᴋ •",
+                        callback_data="settings_back_helper",
+                    ),
+                    InlineKeyboardButton(
+                        text="• ᴄʟᴏsᴇ •",
+                        callback_data="close",
+                    ),
+                ]
+            ]
+        ),
+    )
